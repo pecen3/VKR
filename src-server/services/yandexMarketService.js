@@ -1,17 +1,25 @@
 
 
+require('dotenv').config(); 
+
 const axios = require('axios');
 
-const API_URL = 'https://api.partner.market.yandex.ru/businesses/53590269/offer-mappings';
-const API_TOKEN = 'y0_AgAAAABWeeOtAAuWRAAAAAEBUUsMAAC-BeQJufFOyKGuHKSnBdhIVSLNmQ'; 
+const url = `https://api.partner.market.yandex.ru/businesses/${process.env.COMPANY_ID}/offer-mappings?page_token=&limit=`;
+const API_TOKEN = process.env.COMPANY_KEY;
+
+const headers = {
+  'Authorization': `Bearer ${API_TOKEN}`,
+  'Content-Type': 'application/json'
+ 
+};
+const data = {
+  
+};
 
 const fetchAssortment = async () => {
   try {
-    const response = await axios.get(API_URL, {
-      headers: {
-        Authorization: `Bearer ${API_TOKEN}`,
-      },
-    });
+    const response = await axios.post(url, data, { headers: headers });
+    // console.log(response.data);
     return response.data; 
   } catch (error) {
     console.error('Ошибка при запросе к Яндекс.Маркету:', error);

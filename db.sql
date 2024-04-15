@@ -41,6 +41,6 @@ ALTER TABLE
 ALTER TABLE
     "price_history" ADD CONSTRAINT "price_history_product_id_foreign" FOREIGN KEY("product_id") REFERENCES "competitor_products"("id");
 ALTER TABLE
-    "price_history" ADD CONSTRAINT "price_history_product_id_foreign" FOREIGN KEY("product_id") REFERENCES "store_products"("id");
+    "price_history" ADD CONSTRAINT "price_history_product_id_foreign_2" FOREIGN KEY("product_id") REFERENCES "store_products"("id");
 ALTER TABLE
     "competitor_our_product" ADD CONSTRAINT "competitor_our_product_our_product_foreign" FOREIGN KEY("our_product") REFERENCES "store_products"("id");
