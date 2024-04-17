@@ -7,7 +7,9 @@ const MainLayout = () => {
     <div className="container-fluid">
     <div className='row flex-nowrap'>
     <Menu />
+    <div class="col py-3">
         <Outlet />
+        </div>
   </div>
   </div>
   );

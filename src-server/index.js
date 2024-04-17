@@ -13,9 +13,6 @@ app.use('/api', router)
 
 const start = async () => {
   try {
-    // await sequelize.authenticate()
-    // console.log('Connection has been established successfully.');
-    // await sequelize.sync()
 
     app.listen(PORT, () => console.log(aa))
 

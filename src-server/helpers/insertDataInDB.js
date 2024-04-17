@@ -1,36 +1,60 @@
 const {pool} = require('../database')
 
+
+
 const insertAssortmentData = async (data) => {
-  console.log(data)
   const client = await pool.connect();
   try {
-    // Обновленный текст запроса для вставки в таблицу store_products
-    const queryText = `
-      INSERT INTO store_products (product_id, url, title, image, price, rule_id)
-      VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING;
+    // Вставка категорий и получение их id
+    const categoryInsertQuery = `
+      INSERT INTO category (id, name)
+      VALUES ($1, $2) ON CONFLICT (id) DO NOTHING RETURNING id;
     `;
-    // Параметры для вставки, взятые из объекта data
-    const res = await Promise.all(data.map(async data => {
-      const queryParams = [
-        data.product_id, // UUID для продукта
-        data.url, // URL строки 
-        data.title,// Название продукта
-        data.image, // URL изображения продукта
-        data.price, // Цена продукта, bigint
-        data.rule_id, // ID правила, integer
-      ];
-      const res = await client.query(queryText, queryParams);
-      return res
-    }))
 
-    
-    console.log('Вставленная записи:', res);
-    return res; // Возвращает вставленную запись
+    // Структура для отслеживания новых вставок
+    let newCategories = 0;
+    let newProducts = 0;
+
+    // Вставляем категории
+    const categoryIds = await Promise.all(data.map(async item => {
+      const categoryRes = await client.query(categoryInsertQuery, [item.category.id, item.category.name]);
+      if (categoryRes.rowCount > 0) newCategories++;
+      return { categoryId: item.category.id, product: item };
+    }));
+
+    // Вставка товаров
+    const productInsertQuery = `
+      INSERT INTO store_products (id, ym_id, url, title, image, category_id, price, rec_price, min_price, rule_id, updated_at)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) ON CONFLICT (ym_id) DO NOTHING;
+    `;
+
+    const productsResult = await Promise.all(categoryIds.map(async ({ categoryId, product }) => {
+      const productParams = [
+        product.product_id,
+        product.YM_id,
+        product.url,
+        product.title,
+        product.image,
+        categoryId, // Использование categoryId из результата предыдущей операции
+        product.price,
+        null, // rec_price, можно указать другое значение, если необходимо
+        null, // min_price, можно указать другое значение, если необходимо
+        product.rule_id,
+        new Date() // updated_at, текущая дата и время
+      ];
+      console.log(productParams)
+      const res = await client.query(productInsertQuery, productParams);
+      if (res.rowCount > 0) newProducts++;
+      return res;
+    }));
+
+    console.log(`Новых категорий: ${newCategories}, Новых товаров: ${newProducts}`);
+    return { "Новых категорий": newCategories, "Новых товаров": newProducts };
   } catch (err) {
     console.error('Ошибка при вставке в БД:', err);
-    throw err; // Пробрасывает ошибку дальше
+    throw err;
   } finally {
-    client.release(); // Освобождение клиента после завершения запроса
+    client.release();
   }
 };
 

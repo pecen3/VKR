@@ -1,6 +1,6 @@
-const {Sequelize} = require('sequelize');
 require('dotenv').config(); 
 const { Pool } = require('pg');
+const postgres = require('postgres')
 
 
 
@@ -21,9 +21,19 @@ const { Pool } = require('pg');
 const pool = new Pool({
   user: 'postgres', // ваше имя пользователя в PostgreSQL
   host: 'localhost',
-  database: 'VKR', // название вашей базы данных
+  database: 'test', // название вашей базы данных
   password: '123456', // ваш пароль
   port: 5432, // порт, на котором работает PostgreSQL
 });
 
-module.exports = { pool };
+
+const sql = postgres({
+  host: 'localhost',            // Postgres ip address[s] or domain name[s]
+  port: 5432,          // Postgres server port[s]
+  database: 'test',            // Name of database to connect to
+  username: 'postgres',            // Username of database user
+  password: '123456',            // Password of database user
+
+})
+
+module.exports = { pool, sql };

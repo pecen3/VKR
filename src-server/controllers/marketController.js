@@ -6,14 +6,17 @@ const getAssortment = async (req, res) => {
   try {
     const data = await yandexMarketService.fetchAssortment();
     // console.log(data)
+
     const transformed = transformDataForDB(data)
-    // console.log(transformed)
+
+    console.log(transformed)
     // console.log(insertAssortmentData.insertAssortmentData())
+
     const insertData = await insertAssortmentData(transformed)
-    
+    // res.json(transformed)
     res.json(insertData); // Отправляем полученные данные клиенту
   } catch (error) {
-    console.error(error)
+    // console.error(error)
     res.status(500).json({ message: 'Ошибка при получении данных от Яндекс.Маркета' });
   }
 };
