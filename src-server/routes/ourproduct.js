@@ -5,6 +5,7 @@ const router = new Router();
 
 router.get('/', ourproductController.getAll); //to do 
 router.get('/:id', ourproductController.getOne);
+router.post('/:id', ourproductController.setMinPrice);
 router.get('/competitors/:id', ourproductController.getAllCompetitorsProducts);
 
 

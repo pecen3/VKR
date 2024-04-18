@@ -34,6 +34,7 @@ async function scrapeWebsite(url) {
         await browser.close();
     }
     console.log({url, title, price})
+    await new Promise(resolve => setTimeout(resolve, 2000));
     return {url, title, price}; 
 }
 

@@ -51,7 +51,7 @@ class competitorsConroller {
   
       const client = await pool.connect();
       const insertQuery = `
-        INSERT INTO competitor_products (id, url, title, price, our_porduct_id, competitor_id, updated_at)
+        INSERT INTO competitor_products (id, url, title, price, our_product_id, competitor_id, updated_at)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *;
       `;
