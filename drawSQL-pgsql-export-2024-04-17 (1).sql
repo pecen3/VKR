@@ -8,7 +8,7 @@ CREATE TABLE "store_products"(
     "price" BIGINT NOT NULL,
     "rec_price" BIGINT NULL,
     "min_price" BIGINT NULL,
-    "rule" BIGINT NOT NULL,
+    "rule_id" BIGINT NOT NULL,
     "updated_at" TIMESTAMP(0) WITHOUT TIME ZONE NULL
 );
 ALTER TABLE
@@ -84,3 +84,22 @@ CREATE TRIGGER update_updated_at_trigger
 BEFORE UPDATE ON competitor_products
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
+
+
+CREATE TABLE our_price_history (
+    id SERIAL PRIMARY KEY,
+    our_product_id UUID NOT NULL,
+    time_stamp TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
+    price BIGINT NOT NULL,
+    FOREIGN KEY (our_product_id) REFERENCES store_products(id)
+);
+
+
+
+CREATE TABLE competitor_price_history (
+    id SERIAL PRIMARY KEY,
+    competitor_product_id UUID NOT NULL,
+    time_stamp TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
+    price BIGINT NOT NULL,
+    FOREIGN KEY (competitor_product_id) REFERENCES competitor_products(id)
+);

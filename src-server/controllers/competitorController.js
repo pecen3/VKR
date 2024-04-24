@@ -30,7 +30,7 @@ class competitorsConroller {
     const {id} = req.body
     
     try {
-        const result = await pool.query('DELETE FROM competitors WHERE id = $1', [id]); // Выполнение SQL-запроса на удаление
+        const result = await pool.query('DELETE FROM competitors WHERE id = $1', [id]); // 
         if (result.rowCount === 0) {
             
             return res.status(404).json({ message: "Competitor not found" });

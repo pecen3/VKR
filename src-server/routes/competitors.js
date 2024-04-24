@@ -4,9 +4,9 @@ const router = new Router();
 
 
 router.get('/', ); //to do 
-router.post('/', competitorController.postCompetitor );
-router.post('/addproduct', competitorController.addProduct );//sдобавить продукт конкурента
-router.delete('/', competitorController.deleteCompetitor );
+router.post('/', competitorController.postCompetitor ); //добавить  конкурента
+router.post('/addproduct', competitorController.addProduct );//добавить продукт конкурента
+router.delete('/', competitorController.deleteCompetitor ); //удалить продукт конкурента
 
 
 

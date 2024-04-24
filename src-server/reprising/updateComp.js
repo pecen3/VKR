@@ -12,13 +12,12 @@ async function updateComp() {
         for (const product of products) {
             const { url, title, price } = await scrapeWebsite(product.url);
 
-            
-            await client.query('UPDATE competitor_products SET title = $1, price = $2, updated_at = $3 WHERE id = $4', 
-                [title, price, new Date(), product.id]);
+            await client.query('INSERT INTO competitor_price_history (competitor_product_id, time_stamp, price) VALUES ($1, $2, $3)', 
+            [product.id, new Date(), price]);
 
-            
-            await client.query('INSERT INTO price_history (product_id, time_stamp, price) VALUES ($1, $2, $3)', 
-                [product.id, new Date(), price]);
+            await client.query('UPDATE competitor_products SET price = $1 WHERE id = $2', 
+                [ price, product.id]);
+
         }
         return true
     } catch (error) {

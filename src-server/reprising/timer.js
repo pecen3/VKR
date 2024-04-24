@@ -9,9 +9,9 @@ async function scheduledTask() {
     if (canProceedWithRepricing) {
         console.log("Условия удовлетворены, начинаем процесс репрайсинга.");
         const statusUpdate = await updateComp()
-        // if (statusUpdate) {
-
-        // }
+        if (statusUpdate) {
+            
+        }
     } else {
         console.log("Условия не удовлетворены, репрайсинг не выполняется.");
     }

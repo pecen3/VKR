@@ -9,12 +9,11 @@ function calculateRecommendedPrice(product, ruleString) {
   const avg = competitorsPrices.reduce((sum, p) => sum + p, 0) / competitorsPrices.length;
   const median = getMedian(competitorsPrices);
   const stdDev = calculateStdDev(competitorsPrices);  
-
   
   try {
       const calculatePrice = new Function('cost', 'currentPrice', 'min', 'max', 'avg', 'median', 'stdDev', `return ${ruleString};`);
       const recPrice = calculatePrice(cost, currentPrice, min, max, avg, median, stdDev);
-      return recPrice;
+      return parseInt(recPrice);
   } catch (error) {
       console.error('Ошибка при выполнении правила: ', error);
       return null; 
@@ -36,15 +35,18 @@ function calculateStdDev(numbers) {
   return Math.sqrt(variance);
 }
 
-const productExample = {
-  "id": "5fa4c042-7651-44e3-a052-fbd8fa811d29",
-  "price": "2099",
-  "min_price": "2000",
-  "competitors_price": ["795", "682", "2100", "2090", "2085"]
-};
+// const productExample = {
+//   "id": "5fa4c042-7651-44e3-a052-fbd8fa811d29",
+//   "price": "2099",
+//   "min_price": "2000",
+//   "competitors_price": ["795", "682", "2100", "2090", "2085"]
+// };
 
-const ruleStringExample = "(stdDev > 1000) ? cost + cost * 0.20 : cost + cost * 0.10";
+// const ruleStringExample = "(stdDev > 1000) ? cost + cost * 0.20 : cost + cost * 0.10";
 
 
-const recommendedPrice = calculateRecommendedPrice(productExample, ruleStringExample);
-console.log(`Рекомендованная цена: ${recommendedPrice}`);
+// const recommendedPrice = calculateRecommendedPrice(productExample, ruleStringExample);
+// console.log(`Рекомендованная цена: ${recommendedPrice}`);
+
+
+module.exports ={ calculateRecommendedPrice}

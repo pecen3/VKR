@@ -5,7 +5,6 @@ const BASE_URL = process.env.BASE_URL;
 
 async function fetchOurProducts() {
     try {
-      console.log(1212)
         const response = await axios.get(`${BASE_URL}/products/`);
         console.log(response.data)
         return response.data;

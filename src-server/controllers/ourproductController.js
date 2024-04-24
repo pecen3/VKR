@@ -48,7 +48,7 @@ class ourproductController {
           price: rows[0].price,
           rec_price: rows[0].rec_price,
           min_price: rows[0].min_price,
-          rule: rows[0].rule,
+          rule_id: rows[0].rule_id,
           updated_at: rows[0].updated_at,
           competitors_price: rows.filter(row => row.competitor_price != null).map(row => row.competitor_price)
       };
