@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import Search from '../Componets/Products/Search';
+import Search from '../Componets/Search';
 
 import ProductsList from '../Componets/Products/ProductsList';
 
@@ -13,6 +13,7 @@ const Products = () => {
     <div className='p-2'>
       <Search/>
     </div>
+
     <div className='p-2'>
       <ProductsList/>
     </div>

@@ -4,7 +4,7 @@ const express = require('express')
 const router = require('./routes/index')
 const aa = require('./helpers/insertDataInDB')
 const cron = require('node-cron');
-const { setupCronJobs } = require('./reprising/timer');
+const { setupCronJobs, scheduledTask } = require('./reprising/timer');
 const { repriceProducts } = require('./reprising/repriceOurProducts')
 const PORT = process.env.PORT || 5000
 
@@ -17,8 +17,10 @@ app.use('/api', router)
 
 const start = async () => {
   try {
-    repriceProducts()
+    // repriceProducts()
+    
     app.listen(PORT, () => console.log(PORT))
+    // await scheduledTask()s
 
   } catch (error) {
     console.log(error)

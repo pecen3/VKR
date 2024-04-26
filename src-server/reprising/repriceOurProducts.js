@@ -72,13 +72,17 @@ async function repriceProducts() {
 
       // console.log(ruleDescription)
       if (ruleDescription === "Без правила") {
-        console.log(` "Без правила" для товара с ID ${productId}`);
+        console.log(`"Без правила" для товара с ID ${productId}`);
         
 
       } else {
         const recommendedPrice = calculateRecommendedPrice(productInfo, rule.rule);
-
-        await updateRecommendedPrice(productId, recommendedPrice, ruleDescription);
+        if (recommendedPrice < productInfo.min_price) {
+          await updateRecommendedPrice(productId, productInfo.min_price, ruleDescription);
+        } else {
+          await updateRecommendedPrice(productId, recommendedPrice, ruleDescription);
+        }
+        
       }
       const client = await pool.connect();
       await client.query('INSERT INTO our_price_history (our_product_id, time_stamp, price) VALUES ($1, $2, $3)',

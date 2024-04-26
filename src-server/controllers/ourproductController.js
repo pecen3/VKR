@@ -1,5 +1,6 @@
 const {pool} = require('../database')
-
+const axios = require('axios');
+const BASE_URL = process.env.BASE_URL;
 class ourproductController {
   async getAll(req, res) {
     try {
@@ -34,29 +35,37 @@ class ourproductController {
       const { rows } = await pool.query(queryText, [id]);
 
       if (rows.length === 0) {
-          return res.status(404).json({ message: 'Product not found' });
+          return res.status(404).json({ message: 'Не найден товар' });
       }
-
+      console.log(rows[0].category_id)
+      console.log(`${BASE_URL}/categories/${rows[0].category_id}`)
+      const categoryResponse = await axios.get(`${BASE_URL}/categories/${rows[0].category_id}`);
+      const category_name = categoryResponse.data.category_name;
+      const ruleResponse = await axios.get(`${BASE_URL}/rules/${rows[0].rule_id}`);
+      const rule_info = ruleResponse.data;
       //  данные 
       const productData = {
           id: rows[0].id,
-          YM_id: rows[0].YM_id,
+          ym_id: rows[0].ym_id,
           url: rows[0].url,
           title: rows[0].title,
           image: rows[0].image,
           category_id: rows[0].category_id,
+          category_name: category_name,
           price: rows[0].price,
           rec_price: rows[0].rec_price,
           min_price: rows[0].min_price,
           rule_id: rows[0].rule_id,
+          rule_description: rule_info.description,
+          rule_rule: rule_info.rule, 
           updated_at: rows[0].updated_at,
           competitors_price: rows.filter(row => row.competitor_price != null).map(row => row.competitor_price)
       };
 
       res.json(productData);
   } catch (error) {
-      console.error('Error getting product:', error);
-      res.status(500).json({ message: 'Error getting product from database' });
+      console.error('Ошибка:', error);
+      res.status(500).json({ message: 'Ошибка бд' });
   }
   };
 

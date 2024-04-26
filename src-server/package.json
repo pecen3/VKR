@@ -22,6 +22,7 @@
     "puppeteer": "^22.6.5",
     "sequelize": "^6.37.2",
     "sequelize-auto": "^0.8.8",
+    "user-agents": "^1.1.185",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
