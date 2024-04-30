@@ -33,7 +33,7 @@ class ourproductController {
               sp.id = $1;
       `;
       const { rows } = await pool.query(queryText, [id]);
-
+      console.log(rows)
       if (rows.length === 0) {
           return res.status(404).json({ message: 'Не найден товар' });
       }
@@ -88,6 +88,7 @@ class ourproductController {
       res.status(500).json({ message: 'Error getting competitor products from database' });
     }
   }
+
   async setMinPrice(req, res) {
     const { id } = req.params;  
     const { min_price } = req.body;  
@@ -105,7 +106,6 @@ class ourproductController {
         
         return res.status(404).json({ message: 'Product not found' });
       }
-
       
       res.status(200).json({ message: 'Min price updated successfully', product: rows[0] });
     } catch (error) {
@@ -115,6 +115,80 @@ class ourproductController {
     }
 
   }
+
+  async getHistory(req, res) {
+    const { id } = req.params;
+  
+    try {
+      const client = await pool.connect();
+  
+      const ourHistoryResult = await client.query('SELECT time_stamp, price FROM our_price_history WHERE our_product_id = $1', [id]);
+      const ourHistory = ourHistoryResult.rows.map(row => ({ date: row.time_stamp, price: row.price }));
+  
+      const ourProductResponse = await axios.get(`${BASE_URL}/products/${id}`);
+      const ourProductName = ourProductResponse.data.title;
+  
+      
+      const competitorsResponse = await axios.get(`${BASE_URL}/products/competitors/${id}`);
+      const competitors = competitorsResponse.data;
+  
+      const competitorsHistory = {};
+      for (const competitor of competitors) {
+        // const competitorId = competitor.title;
+        const competitorHistoryResult = await client.query('SELECT time_stamp, price FROM competitor_price_history WHERE competitor_product_id = $1', [competitor.id]);
+        const competitorHistory = competitorHistoryResult.rows.map(row => ({ date: row.time_stamp, price: row.price }));
+        competitorsHistory[competitor.title] = competitorHistory;
+      }
+  
+      client.release();
+  
+      res.json({ our_history: ourHistory, our_product_name: ourProductName, competitors_history: competitorsHistory, competitors_count: competitors.length });
+    } catch (err) {
+      console.error('Error executing query or API request', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+
+
+  async getDetailedComp(req, res) {
+    const { id } = req.params;
+
+    try {
+      // Шаг 1: Получаем все товары конкурентов для данного товара
+      const response = await axios.get(`${BASE_URL}/products/competitors/${id}`);
+      const competitorProducts = response.data;
+
+      // Шаг 2: Получаем названия магазинов из базы данных
+      const competitorNames = await pool.query('SELECT id, name FROM competitor');
+      const competitorNamesMap = {};
+      competitorNames.rows.forEach(competitor => {
+          competitorNamesMap[competitor.id] = competitor.name;
+      });
+
+      // Шаг 3: Добавляем названия магазинов к товарам
+      competitorProducts.forEach(product => {
+          product.store_name = competitorNamesMap[product.competitor_id];
+      });
+
+      // Шаг 4: Группируем товары по магазинам
+      const groupedProducts = {};
+      competitorProducts.forEach(product => {
+          if (!groupedProducts[product.store_name]) {
+              groupedProducts[product.store_name] = [];
+          }
+          groupedProducts[product.store_name].push(product);
+      });
+
+      res.status(200).json(groupedProducts);
+  } catch (error) {
+      console.error('Ошибка при получении детальной информации о товарах конкурентов:', error);
+      res.status(500).send('Произошла ошибка при получении детальной информации о товарах конкурентов');
+  }
+
+  }
+
+
   //  async postParse(req, res) {
   //   const {url} = req.body
   //   // console.log(url)

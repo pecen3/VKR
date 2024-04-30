@@ -20,7 +20,7 @@ CREATE TABLE "competitor_products"(
     "url" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "price" BIGINT NOT NULL,
-    "our_porduct_id" UUID NULL,
+    "our_product_id" UUID NULL,
     "competitor_id" UUID NULL,
     "updated_at" TIMESTAMP(0) WITHOUT TIME ZONE NULL
 );

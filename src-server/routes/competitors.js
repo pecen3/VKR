@@ -3,10 +3,11 @@ const competitorController = require('../controllers/competitorController');
 const router = new Router();
 
 
-router.get('/', ); //to do 
+router.get('/', competitorController.getAll ); //to do 
 router.post('/', competitorController.postCompetitor ); //добавить  конкурента
+router.delete('/:id', competitorController.deleteCompetitor ); //удалить конкурента
 router.post('/addproduct', competitorController.addProduct );//добавить продукт конкурента
-router.delete('/', competitorController.deleteCompetitor ); //удалить продукт конкурента
+router.delete('/deleteproduct/:id', competitorController.deleteProduct );//удалить продукт конкурента
 
 
 

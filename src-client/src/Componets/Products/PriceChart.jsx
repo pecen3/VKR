@@ -2,7 +2,7 @@ import React, { useEffect, useRef,  useId } from 'react';
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 
-const PriceChart = ({ id, ourPrice, competitorsPrices }) => {
+const PriceChart = ({ id, ourPrice, competitorsPrices}) => {
 
   const chartId = useId();
   const canvasRef = useRef();
@@ -29,9 +29,7 @@ const PriceChart = ({ id, ourPrice, competitorsPrices }) => {
         }
         return ``;
     });
-    // console.log( allPrices)
-    // console.log( labels)
-    // console.log( chartData)
+
 
     new Chart(canvasRef.current, {
         type: 'bar',
@@ -76,7 +74,7 @@ const PriceChart = ({ id, ourPrice, competitorsPrices }) => {
           }
         }
     });
-}, []);
+}, [competitorsPrices, ourPrice]);
 
 
 
@@ -89,125 +87,6 @@ const PriceChart = ({ id, ourPrice, competitorsPrices }) => {
 
 
 
-
-  // const canvasRef = useRef(null);
-
-  // useEffect(() => {
-  //   const parsedOurPrice = parseInt(ourPrice, 10);
-  //   const parsedCompetitorPrices = competitorPrices.map(price => parseInt(price, 10));
-
-  //   const canvas = canvasRef.current;
-  //   const ctx = canvas.getContext('2d');
-
-  //   const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-  //   gradient.addColorStop(0, 'green');
-  //   gradient.addColorStop(1, 'red');
-
-  //   const chart = new Chart(ctx, {
-  //     type: 'bar',
-  //     data: {
-  //       labels: ['Our Price', 'Competitor Prices'],
-  //       datasets: [{
-  //         label: 'Prices',
-  //         data: [parsedOurPrice, Math.max(...parsedCompetitorPrices)],
-  //         backgroundColor: gradient,
-  //         borderWidth: 1
-  //       }]
-  //     },
-  //     options: {
-  //       indexAxis: 'y', // Горизонтальная ось
-  //       scales: {
-  //         x: {
-  //           beginAtZero: true,
-  //           ticks: {
-  //             callback: function(value) {
-  //               return '$' + value;
-  //             }
-  //           }
-  //         }
-  //       },
-  //       plugins: {
-  //         legend: {
-  //           display: false
-  //         }
-  //       },
-  //       responsive: false, // Отключаем авто-масштабирование
-  //       maintainAspectRatio: true // Устанавливаем пропорциональное соотношение
-  //     }
-  //   });
-
-  //   return () => chart.destroy();
-  // }, [ourPrice, competitorPrices]);
-
-  // return (
-  //   <div style={{ width: '100%', height: '100%' }}>
-  //     <canvas ref={canvasRef} width="150" height="50" />
-  //   </div>
-  // );
-
-
-
-
-
-
-  // const [chart, setChart] = useState(null);
-
-  // useEffect(() => {
-  //   const ctx = document.getElementById('chart').getContext('2d');
-  //   const chartData = {
-  //     labels: ['Min', 'Max'],
-  //     datasets: [{
-  //       label: 'Price Comparison',
-  //       data: [
-  //         Math.min(...competitorPrices.map(Number)),
-  //         Math.max(...competitorPrices.map(Number)),
-  //       ],
-  //       backgroundColor: [
-  //         'rgba(0, 128, 0, 0.5)', // green
-  //         'rgba(255, 0, 0, 0.5)', // red
-  //       ],
-  //       borderColor: [
-  //         'rgba(0, 128, 0, 1)', // green
-  //         'rgba(255, 0, 0, 1)', // red
-  //       ],
-  //       borderWidth: 1,
-  //     }],
-  //   };
-
-  //   const options = {
-  //     scales: {
-  //       y: {
-  //         display: false,
-  //       },
-  //     },
-  //     plugins: {
-  //       legend: {
-  //         display: false,
-  //       },
-  //     },
-  //   };
-
-  //   setChart(new Chart(ctx, {
-  //     type: 'bar',
-  //     data: chartData,
-  //     options,
-  //   }));
-
-  //   // Add arrow to indicate our price
-  //   const ourPriceValue = Number(ourPrice);
-  //   const arrowX = ourPriceValue / Math.max(...competitorPrices.map(Number));
-  //   const arrowY = 10; // adjust this value to position the arrow correctly
-  //   ctx.beginPath();
-  //   ctx.moveTo(arrowX, arrowY);
-  //   ctx.lineTo(arrowX, arrowY - 10);
-  //   ctx.stroke();
-  // }, [ourPrice, competitorPrices]);
-
-  // return (
-  //   <div>
-  //     <canvas id="chart" width="400" height="100"></canvas>
-  //   </div>
-  // );
 };
 
 export default PriceChart;

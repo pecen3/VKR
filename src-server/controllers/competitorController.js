@@ -5,19 +5,27 @@ const { v4: uuidv4 } = require('uuid');
 const { scrapeWebsite } = require('../parser/parser');
 
 class competitorsConroller {
-  async getCompetitors(req, res) {
-    // всех конкурентов для определенного товара своего магазина
-    res.json({message: 'get'})
-  };
+  async getAll(req, res) {
+    try {
+      const query = 'SELECT * FROM competitor';
+      const { rows } = await pool.query(query);
 
+      res.json(rows);
+    } catch (error) {
+      console.error('Ошибка при получении конкурентов:', error);
+      res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    }
+  }
+
+  
    async postCompetitor(req, res) {
     const {name} = req.body
-    const comp = {id: uuidv4(), name: name}
-    console.log(comp)
+    const uuid = {id: uuidv4(), name: name}
+    console.log(uuid)
     try {
       const insertComp = await sql`
       insert into competitors ${
-        sql(comp, 'id', 'name')
+        sql(uuid, 'id', 'name')
       }
       `
       res.json(insertComp)
@@ -27,7 +35,7 @@ class competitorsConroller {
   };
 
   async deleteCompetitor(req, res) {
-    const {id} = req.body
+    const {id} = req.params
     
     try {
         const result = await pool.query('DELETE FROM competitors WHERE id = $1', [id]); // 
@@ -73,6 +81,23 @@ class competitorsConroller {
     } catch (error) {
       console.error('Ошибка при добавлении продукта:', error);
       res.status(500).json({ error: "Ошибка при добавлении продукта" });
+    }
+  }
+
+
+  async deleteProduct(req, res) {
+    const {id} = req.params
+
+    console.log(id)
+    try {
+      const deleteProductQuery = 'DELETE FROM competitor_products WHERE id = $1';
+      await pool.query(deleteProductQuery, [id]);
+  
+  
+      res.status(200).json({ message: 'Товар успешно удален и связанные записи из истории цен тоже удалены.' });
+    } catch (error) {
+      console.error('Ошибка при удалении товара:', error);
+      res.status(500).json({ error: 'Произошла ошибка при удалении товара и связанных записей из истории цен.' });
     }
   }
 }
