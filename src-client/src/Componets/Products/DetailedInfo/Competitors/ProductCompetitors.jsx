@@ -16,9 +16,6 @@ const ProductCompetitors = ( {productId, modalChange, setModalChange}) => {
   const [competitors, setCompetitors] = useState([]);
 
 
-  const [newCompetitorUrl, setNewCompetitorUrl] = useState('');
-  const [selectedStore, setSelectedStore] = useState('');
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,7 +27,7 @@ const ProductCompetitors = ( {productId, modalChange, setModalChange}) => {
     };
 
     fetchData();
-  }, []);
+  }, [modalChange]);
 
   const handleDeleteCompetitor = (competitorId) => {
     setSelectedCompetitorId(competitorId);
@@ -83,7 +80,7 @@ const ProductCompetitors = ( {productId, modalChange, setModalChange}) => {
     </Stack>
 
     <h5 className='my-3'>Добавление товара конкурента</h5>
-      <AddCompetitorProduct productId={productId}/>
+      <AddCompetitorProduct productId={productId} setModalChange={setModalChange}/>
       <DeleteConfirmationModal 
         show={showDeleteModal} 
         handleClose={handleCloseDeleteModal} 

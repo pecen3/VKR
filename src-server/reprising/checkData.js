@@ -5,9 +5,9 @@ const BASE_URL = process.env.BASE_URL;
 
 async function fetchOurProducts() {
     try {
-        console.log(`${BASE_URL}/products/`)
+        
         const response = await axios.get(`${BASE_URL}/products/`);
-        console.log(response.data)
+       
         return response.data;
     } catch (error) {
         console.error('Ошибка при получении наших товаров:', error);

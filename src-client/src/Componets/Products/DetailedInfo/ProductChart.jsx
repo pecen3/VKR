@@ -10,7 +10,7 @@ Chart.register(...registerables);
 
 
 // { ourPriceData, competitorsData }
-const LineChart = ({productId}) => {
+const LineChart = ({productId, modalChange}) => {
 
   const chartRef = useRef();
   const [productHistory, setProductHistory] = useState([]);
@@ -35,7 +35,7 @@ const LineChart = ({productId}) => {
     }
   };
 
-  useEffect(({}) => {
+  useEffect(() => {
 
     const currentDate = new Date();
     const defaultStartDate = new Date(currentDate);
@@ -45,7 +45,7 @@ const LineChart = ({productId}) => {
     setDateRange([defaultStartDate, defaultEndDate]);
     console.log(dateRange)
     fetchHistory();
-  }, []);
+  }, [modalChange]);
 
   useEffect(() => {
     if (productHistory.length === 0 || competitorsHistory.length === 0) return;

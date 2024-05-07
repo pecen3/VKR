@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import Search from '../Componets/Search';
+import Search from '../Componets/Products/Search';
 
 import ProductsList from '../Componets/Products/ProductsList';
 

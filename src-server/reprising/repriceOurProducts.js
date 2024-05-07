@@ -16,7 +16,7 @@ async function updateRecommendedPrice(productId, recommendedPrice, ruleDescripti
     const query = 'UPDATE store_products SET price = $1, rec_price = $1 WHERE id = $2';
     const result = await client.query(query, [recommendedPrice, productId]);
     client.release();
-    console.log(`Обнавлена рекомендованная цена дял товара с ID ${productId} на ${recommendedPrice}`);
+    // console.log(`Обнавлена рекомендованная цена дял товара с ID ${productId} на ${recommendedPrice}`);
   } catch (error) {
     console.error(`Ошибка обновления товара с ID ${productId}:`, error.message);
     throw error;
@@ -56,43 +56,55 @@ async function getRuleById(ruleId) {
   }
 }
 
+async function getOurProductIds() {
+  try {
+    const productIds = await getProductIds();
+    return productIds;
+  } catch (error) {
+    console.error('Ошибка при получении идентификаторов наших продуктов:', error.message);
+    throw error;
+  }
+}
+
+async function repriceProduct(productId) {
+  try {
+    const productInfo = await getProductInfo(productId);
+    const rule = await getRuleById(productInfo.rule_id);
+    const ruleDescription = rule.description;
+
+    if (ruleDescription === "Без правила") {
+      console.log(`"Без правила" для товара с ID ${productId}`);
+    } else {
+      const recommendedPrice = calculateRecommendedPrice(productInfo, rule.rule);
+      if (recommendedPrice < productInfo.min_price) {
+        await updateRecommendedPrice(productId, productInfo.min_price, ruleDescription);
+      } else {
+        await updateRecommendedPrice(productId, recommendedPrice, ruleDescription);
+      }
+    }
+
+    const client = await pool.connect();
+    await client.query('INSERT INTO our_price_history (our_product_id, time_stamp, price) VALUES ($1, $2, $3)', [
+      productInfo.id,
+      new Date(),
+      productInfo.price,
+    ]);
+    client.release();
+  } catch (error) {
+    console.error(`Ошибка при репрайсинге продукта с ID ${productId}:`, error.message);
+    throw error;
+  }
+}
+
 async function repriceProducts() {
   try {
-
-    const productIds = await getProductIds();
-
+    const productIds = await getOurProductIds();
     for (const productId of productIds) {
-
-      const productInfo = await getProductInfo(productId);
-
-      const rule = await getRuleById(productInfo.rule_id);
-
-      // const hasRule = !!rule;
-      const ruleDescription = rule.description;
-
-      // console.log(ruleDescription)
-      if (ruleDescription === "Без правила") {
-        console.log(`"Без правила" для товара с ID ${productId}`);
-        
-
-      } else {
-        const recommendedPrice = calculateRecommendedPrice(productInfo, rule.rule);
-        if (recommendedPrice < productInfo.min_price) {
-          await updateRecommendedPrice(productId, productInfo.min_price, ruleDescription);
-        } else {
-          await updateRecommendedPrice(productId, recommendedPrice, ruleDescription);
-        }
-        
-      }
-      const client = await pool.connect();
-      await client.query('INSERT INTO our_price_history (our_product_id, time_stamp, price) VALUES ($1, $2, $3)',
-                           [productInfo.id, new Date(),  productInfo.price]);
-      client.release();
-      
+      await repriceProduct(productId);
     }
   } catch (error) {
     console.error('Ошибка во время репрайсинга наших товаров:', error.message);
   }
 }
 
-module.exports = { repriceProducts }
+module.exports = { repriceProducts, repriceProduct }

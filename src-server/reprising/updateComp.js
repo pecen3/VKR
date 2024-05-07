@@ -7,7 +7,7 @@ async function updateComp() {
         
         const res = await client.query('SELECT * FROM competitor_products');
         const products = res.rows;
-        console.log(products)
+        
         
         for (const product of products) {
             const { url, title, price } = await scrapeWebsite(product.url);

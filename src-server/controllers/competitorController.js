@@ -21,7 +21,7 @@ class competitorsConroller {
    async postCompetitor(req, res) {
     const {name} = req.body
     const uuid = {id: uuidv4(), name: name}
-    console.log(uuid)
+    // console.log(uuid)
     try {
       const insertComp = await sql`
       insert into competitors ${
@@ -88,7 +88,7 @@ class competitorsConroller {
   async deleteProduct(req, res) {
     const {id} = req.params
 
-    console.log(id)
+    // console.log(id)
     try {
       const deleteProductQuery = 'DELETE FROM competitor_products WHERE id = $1';
       await pool.query(deleteProductQuery, [id]);

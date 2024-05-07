@@ -1,12 +1,22 @@
-const {pool} = require('../database')
+const {pool} = require('../database');
+const { repriceProduct } = require('../reprising/repriceOurProducts');
 
 const rulesController = {
 
   async getAll(req, res) {
     try {
       const client = await pool.connect();
-      const result = await client.query('SELECT * FROM price_rules');
-      client.release(); 
+      const result = await client.query(`
+        SELECT
+          pr.id,
+          pr.description,
+          pr.rule,
+          COUNT(sp.id) AS product_count
+        FROM price_rules pr
+        LEFT JOIN store_products sp ON pr.id = sp.rule_id
+        GROUP BY pr.id, pr.description, pr.rule
+      `);
+      client.release();
       res.json(result.rows);
     } catch (err) {
       console.error('Ошибка', err);
@@ -44,17 +54,44 @@ const rulesController = {
       res.status(500).json({ error: 'Internal server error' });
     }
   },
+  async changeRule(req, res) {
+    const { id } = req.params;
+    const { description, rule } = req.body;
+  
+    try {
+      const client = await pool.connect();
+  
+      const updateResult = await client.query(
+        'UPDATE price_rules SET description = $1, rule = $2 WHERE id = $3 RETURNING *',
+        [description, rule, id]
+      );
+  
+      if (updateResult.rowCount === 0) {
+        res.status(404).json({ error: 'Правило не найдено' });
+        return;
+      }
+  
+      const updatedRule = updateResult.rows[0];
+      client.release();
+      res.json(updatedRule);
+    } catch (err) {
+      console.error('Ошибка', err);
+      res.status(500).json({ error: 'Внутрянняя ошибка' });
+    }
+  }, 
+
 
   async changeProductRule(req, res) {
     const productId = req.query.id; 
     const ruleId = parseInt(req.query.ruleid);
 
     try {
-      // Выполняем SQL-запрос UPDATE для изменения правила продукта
+      
       const result = await pool.query(
           'UPDATE store_products SET rule_id = $1 WHERE id = $2',
           [ruleId, productId]
       );
+      repriceProduct(productId)
 
       res.status(200).send('Правило продукта успешно изменено');
   } catch (error) {

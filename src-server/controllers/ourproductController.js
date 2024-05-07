@@ -1,3 +1,4 @@
+const { sendProductPrice } = require('../YM/updateProductPrice');
 const {pool} = require('../database')
 const axios = require('axios');
 const BASE_URL = process.env.BASE_URL;
@@ -33,12 +34,11 @@ class ourproductController {
               sp.id = $1;
       `;
       const { rows } = await pool.query(queryText, [id]);
-      console.log(rows)
+      
       if (rows.length === 0) {
           return res.status(404).json({ message: 'Не найден товар' });
       }
-      console.log(rows[0].category_id)
-      console.log(`${BASE_URL}/categories/${rows[0].category_id}`)
+ 
       const categoryResponse = await axios.get(`${BASE_URL}/categories/${rows[0].category_id}`);
       const category_name = categoryResponse.data.category_name;
       const ruleResponse = await axios.get(`${BASE_URL}/rules/${rows[0].rule_id}`);
@@ -92,9 +92,9 @@ class ourproductController {
   async setMinPrice(req, res) {
     const { id } = req.params;  
     const { min_price } = req.body;  
-
-    if (!min_price) {
-      return res.status(400).json({ message: "min_price is required" });
+    
+    if (parseInt(min_price) < 0) {
+      return res.status(400).json({ message: "min_price меньше нуля" });
     }
 
     try {
@@ -106,7 +106,7 @@ class ourproductController {
         
         return res.status(404).json({ message: 'Product not found' });
       }
-      
+     
       res.status(200).json({ message: 'Min price updated successfully', product: rows[0] });
     } catch (error) {
       
@@ -114,6 +114,53 @@ class ourproductController {
       res.status(500).json({ message: 'Error updating min price in database' });
     }
 
+  }
+  async  setPrice(req, res) {
+    const { id } = req.params;
+    const { price } = req.body;
+  
+    if (parseInt(price) < 0) {
+      return res.status(400).json({ message: 'price меньше нуля' });
+    }
+  
+    try {
+      
+      const productResult = await pool.query(
+        'SELECT id, title, price, min_price, rule_id FROM store_products WHERE id = $1',
+        [id]
+      );
+  
+      if (productResult.rows.length === 0) {
+        return res.status(404).json({ message: 'Товар не найден' });
+      }
+  
+      const { title, min_price, rule_id } = productResult.rows[0];
+  
+     
+      if (price < min_price) {
+        return res.status(400).json({ message: `Новая цена (${price}) меньше минимальной цены (${min_price})` });
+      }
+  
+      
+      const ruleResult = await pool.query(
+        'SELECT id FROM price_rules WHERE description = \'Без правила\' LIMIT 1'
+      );
+  
+      if (ruleResult.rows.length > 0) {
+        const newRuleId = ruleResult.rows[0].id;
+  
+        
+        await pool.query(
+          'UPDATE store_products SET price = $1, rule_id = $2 WHERE id = $3',
+          [price, newRuleId, id]
+        );
+      }
+      sendProductPrice(id)
+      res.json({ message: `Цена товара "${title}" обновлена на ${price}` });
+    } catch (error) {
+      console.error('Ошибка при обновлении цены:', error);
+      res.status(500).json({ message: 'Ошибка при обновлении цены' });
+    }
   }
 
   async getHistory(req, res) {
@@ -155,23 +202,23 @@ class ourproductController {
     const { id } = req.params;
 
     try {
-      // Шаг 1: Получаем все товары конкурентов для данного товара
+     
       const response = await axios.get(`${BASE_URL}/products/competitors/${id}`);
       const competitorProducts = response.data;
 
-      // Шаг 2: Получаем названия магазинов из базы данных
+     
       const competitorNames = await pool.query('SELECT id, name FROM competitor');
       const competitorNamesMap = {};
       competitorNames.rows.forEach(competitor => {
           competitorNamesMap[competitor.id] = competitor.name;
       });
 
-      // Шаг 3: Добавляем названия магазинов к товарам
+     
       competitorProducts.forEach(product => {
           product.store_name = competitorNamesMap[product.competitor_id];
       });
 
-      // Шаг 4: Группируем товары по магазинам
+     
       const groupedProducts = {};
       competitorProducts.forEach(product => {
           if (!groupedProducts[product.store_name]) {

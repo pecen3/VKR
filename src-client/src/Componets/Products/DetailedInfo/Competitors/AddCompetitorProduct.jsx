@@ -7,6 +7,22 @@ const AddCompetitorProduct = ({ productId, modalChange, setModalChange }) => {
   const [selectedStore, setSelectedStore] = useState('');
   const [stores, setStores] = useState([]);
 
+  const handleAddProduct = async () => {
+    try {
+      await axios.post(`${process.env.REACT_APP_BASE_URL}/competitors/addproduct`, {
+        our_product_id: productId,
+        competitor_id: selectedStore,
+        url: newCompetitorUrl,
+      });
+      setNewCompetitorUrl('');
+      setSelectedStore('');
+      setModalChange(Math.random());
+    } catch (error) {
+      console.error('Ошибка при добавлении продукта:', error);
+    }
+  };
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -44,6 +60,7 @@ const AddCompetitorProduct = ({ productId, modalChange, setModalChange }) => {
                 <option value="" disabled hidden>
                   Выберите магазин
                 </option>
+                
                 {stores.map(store => (
                   <option key={store.id} value={store.id}>{store.name}</option>
                 ))}
@@ -51,7 +68,7 @@ const AddCompetitorProduct = ({ productId, modalChange, setModalChange }) => {
             </Form.Group>
           </Col>
           <Col xs={4}>
-            <Button variant="primary" onClick={() => (console.log(12))}>Добавить конкурента</Button>
+            <Button variant="primary" onClick={handleAddProduct}>Добавить конкурента</Button>
           </Col>
         </Row>
       </Form>

@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import Products from './pages/Products';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
+import Rules from './pages/Rules';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='/products' element={<Products/>}/>
         <Route path='/analytics' element={<Analytics/>}/>
         <Route path='/settings' element={<Settings/>}/>
+        <Route path='/rules' element={<Rules/>}/>
     {/* <div className="container-fluid">
       <div className='row flex-nowrap'>
       <Menu/>

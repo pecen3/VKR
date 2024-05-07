@@ -9,7 +9,7 @@ const getAssortment = async (req, res) => {
 
     const transformed = transformDataForDB(data)
 
-    console.log(transformed)
+    // console.log(transformed)
     // console.log(insertAssortmentData.insertAssortmentData())
 
     const insertData = await insertAssortmentData(transformed)

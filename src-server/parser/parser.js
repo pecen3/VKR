@@ -3,7 +3,7 @@ const userAgent = require('user-agents');
 
 
 async function scrapeWebsite(url) {
-    const browser = await puppeteer.launch({headless: true, args: ['--window-size=1920,1080']});
+    const browser = await puppeteer.launch({headless: false, args: ['--window-size=1920,1080']});
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
     
@@ -42,7 +42,7 @@ async function scrapeWebsite(url) {
     // await new Promise(resolve => setTimeout(resolve, 2000));
     price = parseInt(price)
 
-    console.log({url, title, price})
+    // console.log({url, title, price})
     return {url, title, price}; 
 }
 

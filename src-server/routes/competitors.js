@@ -3,7 +3,7 @@ const competitorController = require('../controllers/competitorController');
 const router = new Router();
 
 
-router.get('/', competitorController.getAll ); //to do 
+router.get('/', competitorController.getAll ); 
 router.post('/', competitorController.postCompetitor ); //добавить  конкурента
 router.delete('/:id', competitorController.deleteCompetitor ); //удалить конкурента
 router.post('/addproduct', competitorController.addProduct );//добавить продукт конкурента

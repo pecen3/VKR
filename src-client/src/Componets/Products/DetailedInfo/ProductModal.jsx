@@ -9,6 +9,7 @@ import LineChart from './ProductChart';
 import '../../../App.css'
 import ReprisingRules from './ReprisingRules';
 import ProductCompetitors from './Competitors/ProductCompetitors';
+import PriceInputs from './Competitors/PriceInput';
 function ProductModal({ productInfo, show, onHide, modalChange, setModalChange}) {
 
   
@@ -31,8 +32,9 @@ function ProductModal({ productInfo, show, onHide, modalChange, setModalChange})
         {/* <Stack></Stack> style={{width:"1400px", height:"1000px"}} */}
         <Container >
           <Row>
-            <Col xs={7} style={{zIndex:2}}> <LineChart productId={productInfo.id} /> </Col>
-            <Col >Установка мин цены и текущей цены(!!!без правила) </Col>
+            <Col xs={8} style={{zIndex:2}}> <LineChart productId={productInfo.id} modalChange={modalChange}/> </Col>
+            <Col ><PriceInputs productId={productInfo.id} modalChange={modalChange} setModalChange={setModalChange} productInfo={productInfo}/></Col>
+            
           </Row>
           <Row>
             <Col style={{zIndex:1}}><ReprisingRules rule_id={productInfo.rule_id} rule_description={productInfo.rule_description} rule_rule={productInfo.rule_rule} productId={productInfo.id} modalChage={modalChange} setModalChage={setModalChange}  /></Col>
@@ -40,15 +42,6 @@ function ProductModal({ productInfo, show, onHide, modalChange, setModalChange})
           </Row>
         </Container>
 
-    {/* <Stack>
-      <Container> 
-
-      </Container>
-      <Container> 
-        
-      </Container>
-    </Stack> */}
-    {/* <img src='https://www.iphones.ru/wp-content/uploads/2016/02/Google_plaNet.jpg'/> */}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={onHide}>Закрыть</Button>

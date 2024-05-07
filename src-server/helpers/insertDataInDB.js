@@ -35,10 +35,10 @@ const insertAssortmentData = async (data) => {
         product.url,
         product.title,
         product.image,
-        categoryId, // Использование categoryId из результата предыдущей операции
+        categoryId, 
         product.price,
-        null, // rec_price, можно указать другое значение, если необходимо
-        null, // min_price, можно указать другое значение, если необходимо
+        null, // rec_price
+        0, 
         product.rule_id,
         new Date() // updated_at, текущая дата и время
       ];
