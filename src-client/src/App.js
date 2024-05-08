@@ -10,6 +10,7 @@ import Products from './pages/Products';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import Rules from './pages/Rules';
+import Parser from './pages/Parser';
 
 function App() {
   return (
@@ -20,11 +21,8 @@ function App() {
         <Route path='/analytics' element={<Analytics/>}/>
         <Route path='/settings' element={<Settings/>}/>
         <Route path='/rules' element={<Rules/>}/>
-    {/* <div className="container-fluid">
-      <div className='row flex-nowrap'>
-      <Menu/>
-    </div>
-    </div> */}
+        <Route path='/parser' element={<Parser/>}/>
+
     </Route>
     </Routes>
   );

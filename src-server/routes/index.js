@@ -7,9 +7,7 @@ const competitorsRouter = require('./competitors');
 const productRouter = require('./ourproduct');
 const rulesRouter = require('./rules');
 const categoryRouter = require('./categories')
-// const marketController = require('../controllers/marketController'); 
 
-// router.get('/assortment', marketController.getAssortment);
 
 router.use('/sync', syncRouter)
 router.use('/parse', parseRouter)

@@ -15,10 +15,10 @@ const ProductsList = () => {
     const fetchProducts = async () => {
       try {
         
-        const baseUrl = process.env.REACT_APP_BASE_URL;
+
 
         
-        const response = await axios.get(`${baseUrl}/products`);
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/products`);
 
         setProductsId(response.data);
         // console.log(productsId)
@@ -29,26 +29,13 @@ const ProductsList = () => {
 
     fetchProducts();
   }, []);
-//  return (
-//   <div >
-//     <div className='container '>
-//     <div className='row g-3'>
-//   {productsId.map(productId => <Product id={productId.id}/>)}
-//   {productsId.map(productId => <Product id={productId.id}/>)}
-    
-    
-//     </div>
-//     </div>
-//   </div>
-  
-//  )
+
 
  return (
   <div >
     <div className='fluid'>
     <div className='row g-3'>
-  {/* {productsId.map(productId => <Product id={productId.id}/>)} */}
-  {/* {productsId.map(productId => <Product id={productId.id}/>)} */}
+
     
     
     </div >

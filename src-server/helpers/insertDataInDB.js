@@ -7,7 +7,7 @@ const insertAssortmentData = async (data) => {
   try {
     // Вставка категорий и получение их id
     const categoryInsertQuery = `
-      INSERT INTO category (id, name)
+      INSERT INTO categories (id, name)
       VALUES ($1, $2) ON CONFLICT (id) DO NOTHING RETURNING id;
     `;
 

@@ -22,11 +22,13 @@ const Menu = () => {
                        
                     </li>
                     <li>
-                    <Link to='/rules' className="nav-link align-middle px-0"><i className="fs-4 bi-gear-fill"></i> <span className="ms-1 d-none d-sm-inline">Правила ценообразования</span></Link>
+                    <Link to='/rules' className="nav-link align-middle px-0"><i class="fs-4 bi-file-earmark-ruled"></i> <span className="ms-1 d-none d-sm-inline">Правила ценообразования</span></Link>
+                    </li>
+                    <li>
+                    <Link to='/parser' className="nav-link align-middle px-0"><i class="fs-4 bi-search"></i> <span className="ms-1 d-none d-sm-inline">Парсер</span></Link>
                     </li>
                     <li>
                     <Link to='/analytics' className="nav-link align-middle px-0"><i className="fs-4 bi-speedometer2"></i> <span className="ms-1 d-none d-sm-inline">Аналитика</span></Link>
-                        
                     </li>
                     <li>
                     <Link to='/settings' className="nav-link align-middle px-0"><i className="fs-4 bi-gear-fill"></i> <span className="ms-1 d-none d-sm-inline">Настройки</span></Link>
