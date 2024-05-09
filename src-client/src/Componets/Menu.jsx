@@ -13,13 +13,15 @@ const Menu = () => {
                     <span className="fs-5 d-none d-sm-inline">Price adjust</span>
                 </a>
                 <ul className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                         <Link to='/' className="nav-link align-middle px-0"><i className="fs-4 bi-house"></i> <span className="ms-1 d-none d-sm-inline">Начало</span></Link>
  
-                    </li>
+                    </li> */}
                     <li>
                     <Link to='/products' className="nav-link align-middle px-0"><i className="fs-4 bi-grid"></i> <span className="ms-1 d-none d-sm-inline">Товары</span></Link>
-                       
+                    </li>
+                    <li>
+                    <Link to='/competitors' className="nav-link align-middle px-0"><i className="fs-4 bi-shop"></i> <span className="ms-1 d-none d-sm-inline">Магазины конкурентов</span></Link>
                     </li>
                     <li>
                     <Link to='/rules' className="nav-link align-middle px-0"><i class="fs-4 bi-file-earmark-ruled"></i> <span className="ms-1 d-none d-sm-inline">Правила ценообразования</span></Link>

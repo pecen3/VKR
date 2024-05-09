@@ -7,7 +7,18 @@ const { scrapeWebsite } = require('../parser/parser');
 class competitorsConroller {
   async getAll(req, res) {
     try {
-      const query = 'SELECT * FROM competitor';
+      const query = `SELECT 
+      c.id,
+      c.name,
+      COUNT(cp.id) AS num_products
+    FROM 
+      competitors c
+      LEFT JOIN competitor_products cp ON c.id = cp.competitor_id
+    GROUP BY 
+      c.id, c.name
+    ORDER BY 
+      c.name;`;
+
       const { rows } = await pool.query(query);
 
       res.json(rows);
@@ -32,6 +43,25 @@ class competitorsConroller {
     } catch (error) {
       res.status(500).json({ message: 'Ошибка' });
     }
+  };
+  async editCompetitor(req, res) {
+    const {id} = req.params
+    const {name} = req.body
+
+
+    
+  const query = {
+    text: `UPDATE competitors SET name = $1 WHERE id = $2 RETURNING *`,
+    values: [name, id]
+  };
+
+  try {
+    const result = await pool.query(query);
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Ошибка обновления' });
+  }
   };
 
   async deleteCompetitor(req, res) {

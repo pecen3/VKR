@@ -5,17 +5,15 @@ const {pool} = require('../database')
 const insertAssortmentData = async (data) => {
   const client = await pool.connect();
   try {
-    // Вставка категорий и получение их id
+
     const categoryInsertQuery = `
       INSERT INTO categories (id, name)
       VALUES ($1, $2) ON CONFLICT (id) DO NOTHING RETURNING id;
     `;
 
-    // Структура для отслеживания новых вставок
     let newCategories = 0;
     let newProducts = 0;
 
-    // Вставляем категории
     const categoryIds = await Promise.all(data.map(async item => {
       const categoryRes = await client.query(categoryInsertQuery, [item.category.id, item.category.name]);
       if (categoryRes.rowCount > 0) newCategories++;

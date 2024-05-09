@@ -5,6 +5,7 @@ const router = new Router();
 
 router.get('/', competitorController.getAll ); 
 router.post('/', competitorController.postCompetitor ); //добавить  конкурента
+router.patch('/:id', competitorController.editCompetitor );
 router.delete('/:id', competitorController.deleteCompetitor ); //удалить конкурента
 router.post('/addproduct', competitorController.addProduct );//добавить продукт конкурента
 router.delete('/deleteproduct/:id', competitorController.deleteProduct );//удалить продукт конкурента

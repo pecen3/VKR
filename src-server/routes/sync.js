@@ -8,9 +8,9 @@ router.get('/assortment', marketController.getAssortment);
 
 router.get('/', settingsController.getAllUserInfo);
 
-router.put('/sync-period', settingsController.updateSyncPeriod);
+router.patch('/sync-period', settingsController.updateSyncPeriod);
 
-router.put('/reprice-period', settingsController.updateRepricePeriod);
+router.patch('/reprice-period', settingsController.updateRepricePeriod);
 
 router.get('/database-dump', settingsController.getDatabaseDump);
 

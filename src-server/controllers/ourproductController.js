@@ -207,7 +207,7 @@ class ourproductController {
       const competitorProducts = response.data;
 
      
-      const competitorNames = await pool.query('SELECT id, name FROM competitor');
+      const competitorNames = await pool.query('SELECT id, name FROM competitors');
       const competitorNamesMap = {};
       competitorNames.rows.forEach(competitor => {
           competitorNamesMap[competitor.id] = competitor.name;

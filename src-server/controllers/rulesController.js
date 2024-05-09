@@ -20,7 +20,7 @@ const rulesController = {
       res.json(result.rows);
     } catch (err) {
       console.error('Ошибка', err);
-      res.status(500).json({ error: 'Внутрянняя ошибка' });
+      res.status(500).json({ error: 'Внутрянyяя ошибка' });
     }
   },
 

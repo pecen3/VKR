@@ -39,9 +39,10 @@ const PricingRuleModal = ({
               <h5>Инструкция по созданию правила:</h5>
               <p>
                 <strong>cost</strong> - себестоимость вашего товара<br />
-                <strong>retail</strong> - розничная цена вашего товара<br />
+                <strong>currentPrice</strong> - розничная цена вашего товара<br />
                 <strong>min</strong> - минимальная цена конкурентов<br />
                 <strong>avg</strong> - средняя цена конкурентов<br />
+                <strong>median</strong> - медианная цена конкурентов<br />
                 <strong>max</strong> - максимальная цена конкурентов
               </p>
               <p>

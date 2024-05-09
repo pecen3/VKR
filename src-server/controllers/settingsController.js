@@ -18,7 +18,7 @@ const settingsController = {
 
   updateSyncPeriod: async (req, res) => {
     const { login, sync_period } = req.body;
-
+    console.log(login, sync_period)
     try {
       await pool.query(
         'UPDATE user_info SET sync_period = $1 WHERE login = $2',
@@ -55,14 +55,14 @@ const settingsController = {
     exec(pgDumpCommand, (error, stdout, stderr) => {
       if (error) {
         console.error(error);
-        res.status(500).json({ error: 'Error generating database dump' });
+        res.status(500).json({ error: 'Ошибка генерации sql дампа' });
         return;
       }
 
       res.download(dumpFilePath, 'database_dump.sql', (err) => {
         if (err) {
           console.error(err);
-          res.status(500).json({ error: 'Error sending database dump' });
+          res.status(500).json({ error: 'Ошибка отправки sql дампа' });
         } else {
 
           fs.unlinkSync(dumpFilePath);
