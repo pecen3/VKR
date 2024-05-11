@@ -30,6 +30,7 @@ const LineChart = ({productId, modalChange}) => {
       setProductHistory(our_history);
       setProductName(our_product_name);
       setCompetitorsHistory(Object.entries(competitors_history));
+
     } catch (error) {
       console.error('Error fetching product history:', error);
     }

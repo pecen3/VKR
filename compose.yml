@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+
+  db:
+    build:
+      context: .
+      dockerfile: db.dockerfile
+    environment:
+      - POSTGRES_DB=test
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  server:
+    build:
+      context: ../src-server
+      dockerfile: server.dockerfile
+    ports:
+      - "7000:7000"
+    depends_on:
+      - db
+
+  client:
+    build:
+      context: ../src-client
+      dockerfile: client.dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+
+volumes:
+  db-data:

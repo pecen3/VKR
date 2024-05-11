@@ -10,6 +10,9 @@ import Settings from './pages/Settings';
 import Rules from './pages/Rules';
 import Parser from './pages/Parser';
 import Competitors from './pages/Competitors';
+import AuthLayout from './layouts/AuthLayout';
+import LoginForm from './Componets/Auth/LoginForm';
+import RegForm from './Componets/Auth/RegForm';
 
 function App() {
   return (
@@ -23,6 +26,10 @@ function App() {
         <Route path='/rules' element={<Rules/>}/>
         <Route path='/parser' element={<Parser/>}/>
         <Route path='/competitors' element={<Competitors/>}/>
+    </Route>
+    <Route path='/auth' element={<AuthLayout/>}>
+      <Route path='login' element={<LoginForm/>}/>
+      <Route path='reg' element={<RegForm/>}/>
     </Route>
     </Routes>
   );

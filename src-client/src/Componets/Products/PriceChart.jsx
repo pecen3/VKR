@@ -25,7 +25,7 @@ const PriceChart = ({ id, ourPrice, competitorsPrices}) => {
     const chartData = allPrices.filter((price, index) => index !== ourPriceIndex);
     const labels = allPrices.map((price, index) => {
         if (index === ourPriceIndex) {
-            return 'Наш товар';
+            return '↑';
         }
         return ``;
     });
@@ -39,13 +39,13 @@ const PriceChart = ({ id, ourPrice, competitorsPrices}) => {
             label: 'Цена нашего товара',
             data: allPrices,
             backgroundColor: labels.map(label => {
-              if (label === 'Наш товар') {
+              if (label === '↑') {
                 return 'rgba(255, 99, 132, 0.2)'; // Цвет для нашей цены
               }
               return 'rgba(54, 162, 235, 0.2)'; // Цвет для остальных цен
             }),
             borderColor: labels.map(label => {
-              if (label === 'Наш товар') {
+              if (label === '↑') {
                 return 'rgba(255, 99, 132, 1)'; // Цвет границы для нашей цены
               }
               return 'rgba(54, 162, 235, 1)'; // Цвет границы для остальных цен

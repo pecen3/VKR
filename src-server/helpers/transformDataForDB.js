@@ -6,7 +6,7 @@ const transformDataForDB = (originalData) => {
   
       product_id: uuidv4(),
       YM_id: mapping.marketSku,
-      url: 'https://random-url',
+      url: offer.url, ///check
       title: offer.name,
       image: offer.pictures[0], 
       price: offer.basicPrice.value, 
